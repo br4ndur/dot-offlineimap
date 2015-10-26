@@ -1,0 +1,72 @@
+[general]
+# List of accounts to be synced, separated by a comma.
+accounts = gmail,tekno
+maxsyncaccounts = 2
+pythonfile = ~/cfg/dotfiles/offlineimap/offlineimap.py
+
+[Account gmail]
+# Identifier for the local repository; e.g. the maildir to be synced via IMAP.
+localrepository = gmail-local
+# Identifier for the remote repository; i.e. the actual IMAP, usually non-local.
+remoterepository = gmail-remote
+
+# Status cache. Default is plain, which eventually becomes huge and slow.
+status_backend = sqlite
+# Minutes between syncs
+
+autorefresh = 5
+
+# Number of quick-syncs between autorefreshes. Quick-syncs do not update if the
+# only changes were to IMAP flags
+quick = 10
+
+[Repository gmail-local]
+type = Maildir
+localfolders = ~/.mail/gmail
+nametrans = lambda folder: {'archive': '[Gmail]/All Mail',
+                            }.get(folder, folder)
+
+[Repository gmail-remote]
+type = Gmail
+remoteuser = branduren@gmail.com
+remotepasseval = get_authinfo_password_gmail("imap.gmail.com", "branduren@gmail.com", 993)
+keepalive = 60
+holdconnectionopen = yes
+expunge = yes
+sslcacertfile = /etc/ssl/certs/ca-certificates.crt
+#nametrans = lambda folder: {'[Gmail]/All Mail': 'archive'}.get(folder, folder)
+#folderfilter = lambda folder: folder == '[Gmail]/All Mail'
+realdelete = yes
+
+folderfilter = lambda folder: folder not in ['[Gmail]/All Mail',
+                                             '[Gmail]/Important',
+                                             '[Gmail]/Starred',
+                                             ]
+
+#------------------------------------------------------------
+
+[Account tekno]
+localrepository = tekno-local
+remoterepository = tekno-remote
+status_backend = sqlite
+
+autorefresh = 5
+
+quick = 10
+
+[Repository tekno-local]
+type = Maildir
+localfolders = ~/.mail/tekno
+
+[Repository tekno-remote]
+type = IMAP
+ssl = yes
+remotehost = outlook.office365.com
+remoteuser = boe@tekno.dk
+remotepasseval = get_authinfo_password_tekno("outlook.office365.com", "boe@tekno.dk", 993)
+keepalive = 60
+expunge = yes
+holdconnectionopen = yes
+folderfilter = lambda foldername: foldername in ['INBOX']
+sslcacertfile = /etc/ssl/certs/ca-certificates.crt
+
