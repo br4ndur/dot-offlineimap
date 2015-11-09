@@ -1,8 +1,39 @@
 [general]
 # List of accounts to be synced, separated by a comma.
-accounts = gmail,tekno
-maxsyncaccounts = 2
+accounts = ktbit,tekno,gmail
+maxsyncaccounts = 3
 pythonfile = ~/cfg/dotfiles/offlineimap/offlineimap.py
+
+[Account ktbit]
+localrepository = ktbit-local
+remoterepository = ktbit-remote
+status_backend = sqlite
+autorefresh = 5
+quick = 10
+
+[Repository ktbit-local]
+type = Maildir
+localfolders = ~/.mail/ktbit
+
+[Repository ktbit-remote]
+type = IMAP
+ssl = yes
+remotehost = imap.kolabnow.com
+remoteuser = brandur@ktbit.com
+remotepasseval = get_authinfo_password_ktbit("imap.kolabnow.com", "brandur@ktbit.com", 993)
+keepalive = 60
+expunge = yes
+holdconnectionopen = yes
+#folderfilter = lambda foldername: foldername in ['INBOX']
+sslcacertfile = /etc/ssl/certs/ca-certificates.crt
+folderfilter = lambda folder: folder not in ['INBOX',
+                                             'Sendt',
+                                             'Drafts',
+                                             'Spam',
+                                             'Trash'
+                                            ]
+
+#------------------------------------------------------------
 
 [Account gmail]
 # Identifier for the local repository; e.g. the maildir to be synced via IMAP.
@@ -69,4 +100,3 @@ expunge = yes
 holdconnectionopen = yes
 folderfilter = lambda foldername: foldername in ['INBOX']
 sslcacertfile = /etc/ssl/certs/ca-certificates.crt
-
