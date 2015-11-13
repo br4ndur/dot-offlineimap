@@ -26,12 +26,14 @@ expunge = yes
 holdconnectionopen = yes
 #folderfilter = lambda foldername: foldername in ['INBOX']
 sslcacertfile = /etc/ssl/certs/ca-certificates.crt
-folderfilter = lambda folder: folder not in ['INBOX',
-                                             'Sendt',
-                                             'Drafts',
-                                             'Spam',
-                                             'Trash'
-                                            ]
+folderfilter = lambda folder: folder in ['INBOX',
+                                         'Sendt',
+                                         'Drafts',
+                                         'Spam',
+                                         'Trash',
+                                         'Archive',
+                                         'Archive.receipt',
+                                        ]
 
 #------------------------------------------------------------
 
